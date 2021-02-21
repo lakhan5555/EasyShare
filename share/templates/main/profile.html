@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block BootLink %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" type="css/text" href="{% static 'css/profile.css' %}">   -->
+{% endblock %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body%}
+    <div class="container alert alert-success my-2">
+        {% if user_data.username == request.session.user %}
+            <h2>Welcome <span style="color:#DC3545;">{{user_data.username}}</span> !</h2>
+        {% else %}
+            <h2 style="color:#DC3545;">{{user_data.username}}</h2>
+        {% endif %}
+    </div>
+
+    <div class="container alert alert-success my-2">
+        {% if user_posts %}
+            {% for post in user_posts%}
+            <div class="card">
+                <div class="card-body">
+
+                    <h2 style="color: #050d1a;" class="card-title">Title:  <span style="color: #4a6915;">{{post.title}}</span></h5>
+                    <p style="color: #3d4657;" class="card-text"><h2 style="display: inline-block; color: #050d1a;">About:</h2>  <span style="font-size: 20px;">{{post.desc}}</span></p>
+            
+
+                        {% if request.session.user %}
+                        <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-warning" target="_blank">View</a>
+                        <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-info mx-4" download>Download</a>  
+                        {% else %}
+                            <a href="{% url 'login' %}">You Have To Login To View or Download this File.</a>
+                        {% endif %}
+                    
+                        {% if user_data.username == request.session.user %}
+                            <a href="{% url 'delete' post.id %}" class="btn btn-danger" style="float:right;">Delete</a>
+                        {% endif %}
+                </div>
+            </div>
+
+            {% endfor %}
+        {% else %}
+            <div class="container">
+                <h2>No Posts Yet.</h2>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

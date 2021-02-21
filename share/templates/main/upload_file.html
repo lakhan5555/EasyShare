@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Upload File{% endblock %}
+
+{% block body %}
+
+<div class="container my-4 alert alert-success"> 
+    <div class="container">
+        <form action="{% url 'upload_file' request.session.user %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <br>
+            <div class="form-group">
+                <input type="file" name="filename" id="filechoose" required>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1" class="display-4">Title</label>
+                <input type="text" class="form-control" name="title" id="exampleFormControlInput1" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1" class="display-4">Description</label>
+                <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="10" required></textarea>
+            </div>
+
+            <input type="submit" value="Upload" class="btn btn-outline-primary">
+        </form>
+    </div>
+</div>
+
+{% endblock%}

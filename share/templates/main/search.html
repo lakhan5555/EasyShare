@@ -1,0 +1,64 @@
+{% extends 'main/base.html' %}
+{% block title %}Search{% endblock %}
+
+{% block body%}
+
+    <div class="container alert alert-success my-2">
+        <h2>Search Results For: <span style="color: #DC3545;">{{query}}</span></h2>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    
+                    <a style="color: black;" class="nav-link btn" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><button>Users({{search_users.count}})</button></a>
+                    <a style="color: black;" class="nav-link btn" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><button>Posts({{search_result.count}})</button></a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        {% if search_users %}
+                            {% for user in search_users %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <a href="{% url 'profile' user.username %}"><h2>{{user.username}}</h2></a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <h2>No Results Found.</h2>
+                        {% endif %}
+                    </div>
+
+                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        {% if search_result %}
+                            {% for post in search_result%}
+                                <div class="container my-4 alert alert-success"> 
+                                    <div class="card">
+                                        <h4 class="card-header">By <a style="text-decoration:none; color:blue;" href="{% url 'profile' post.user.username %}">{{post.user}}</a></h5>
+                                        <div class="card-body">
+                                            <h2 style="color: #050d1a;" class="card-title">Title:  <span style="color: #4a6915;">{{post.title}}</span></h5>
+                                                <p style="color: #3d4657;" class="card-text"><h2 style="display: inline-block; color: #050d1a;">About:</h2>  <span style="font-size: 20px;">{{post.desc}}</span></p>
+                                            {% if request.session.user %}
+                                                <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-warning" target="_blank">View</a>
+                                                <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-info mx-4" download>Download</a>  
+                                            {% else %}
+                                                <a href="{% url 'login' %}">You Have To Login Before Download this File.</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            
+                        {% else %}
+                            <h2 style="margin-bottom: 100px;">No Results Found.</h2>   
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

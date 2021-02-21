@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block BootLink %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block title %}Home Page{% endblock %}
+{% block body %}
+<!--Posts -->
+{% for post in posts %}
+<div class="container my-4 alert alert-success"> 
+    <div class="card">
+        <h4 class="card-header">By <a style="text-decoration:none; color:blue;" href="{% url 'profile' post.user.username %}">{{post.user}}</a></h5>
+        <div class="card-body">
+            <h2 style="color: #050d1a;" class="card-title">Title:  <span style="color: #4a6915;">{{post.title}}</span></h5>
+            <p style="color: #3d4657;" class="card-text"><h2 style="display: inline-block; color: #050d1a;">About:</h2>  <span style="font-size: 20px;">{{post.desc}}</span></p>
+
+            {% if request.session.user %}
+                <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-warning" target="_blank">View</a>
+                <a href="{{MEDIA_URL}}{{post.file_field.url}}" class="btn btn-info mx-4" download>Download</a>  
+            {% else %}
+                <a href="{% url 'login' %}">You Have To Login To View or Download this File.</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
